@@ -3,17 +3,19 @@ import { cn } from '@/lib/utils'
 import { FaCircle, FaSquare, FaSquareFull } from 'react-icons/fa'
 import { FaDiamond } from 'react-icons/fa6'
 import { IoTriangle } from 'react-icons/io5'
-import { ActiveTool } from '../types'
+import { ActiveTool, Editor } from '../types'
 import ShapeTool from './shape-tool'
 import { ToolSidebarClose } from './tool-sidebar-close'
 import ToolSidebarHeader from './tool-sidebar-header'
 
 interface ShapeSidebarProps {
+  editor: Editor | undefined
   activeTool: ActiveTool
   onChangeActiveTool: (tool: ActiveTool) => void
 }
 
 const ShapeSidebar = ({
+  editor,
   activeTool,
   onChangeActiveTool,
 }: ShapeSidebarProps) => {
@@ -23,7 +25,7 @@ const ShapeSidebar = ({
   return (
     <aside
       className={cn(
-        'bg-white h-full w-[360px] border-r z-[40] relative flex flex-col',
+        'bg-white h-full w-[360px] border-r z-[40] relative flex flex-col transition',
         activeTool === 'shapes' ? 'visible' : 'hidden'
       )}
     >
@@ -34,16 +36,22 @@ const ShapeSidebar = ({
 
       <ScrollArea>
         <div className="grid grid-cols-3 gap-2 p-4">
-          <ShapeTool icon={FaCircle} onClick={() => {}} />
-          <ShapeTool icon={FaSquare} onClick={() => {}} />
-          <ShapeTool icon={FaSquareFull} onClick={() => {}} />
-          <ShapeTool icon={IoTriangle} onClick={() => {}} />
+          <ShapeTool icon={FaCircle} onClick={() => editor?.addCircle()} />
+          <ShapeTool
+            icon={FaSquare}
+            onClick={() => editor?.addSoftRectangle()}
+          />
+          <ShapeTool
+            icon={FaSquareFull}
+            onClick={() => editor?.addRectangle()}
+          />
+          <ShapeTool icon={IoTriangle} onClick={() => editor?.addTriangle()} />
           <ShapeTool
             icon={IoTriangle}
-            onClick={() => {}}
+            onClick={() => editor?.addInverseTriangle()}
             iconClassName="rotate-180"
           />
-          <ShapeTool icon={FaDiamond} onClick={() => {}} />
+          <ShapeTool icon={FaDiamond} onClick={() => editor?.addDiamond()} />
         </div>
       </ScrollArea>
 
